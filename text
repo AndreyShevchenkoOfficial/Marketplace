@@ -1,0 +1,91 @@
+Для создания сайта, на котором будут представлены все маркетплейсы России, необходимо использовать web-фреймворк для Python, такой как Flask или Django. Для создания простого и понятного дизайна в стиле Apple можно использовать библиотеку Bootstrap. Для построения таблиц сравнения цен можно использовать библиотеку Pandas.
+
+Ниже приведен пример кода на Flask для создания базовой страницы с меню, текстовым полем для ввода названия товара и кнопкой "Найти". Этот код создаст сервер на локальной машине, который будет прослушивать порт 5000. Все файлы, которые будут возвращаться приложением будут сохраняться в каталоге `static`:
+
+```python
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/', methods=['POST'])
+def search():
+    search_term = request.form.get('search')
+    # здесь должен быть ваш код для сравнения цен на товары на разных маркетплейсах
+    return render_template('result.html')
+
+if __name__ == '__main__':
+    app.run(port=5000)
+```
+
+Для отображения результатов поиска на странице результата мы можем создать шаблон `result.html` с использованием библиотеки Bootstrap. Этот шаблон будет отображать таблицу сравнения цен на товары на разных маркетплейсах:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты поиска</title>
+    <!-- подключение библиотеки Bootstrap для стилизации -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+</head>
+<body>
+    <!-- навигационное меню -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Маркетплейсы России</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Техническая поддержка</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <label for="search" class="text-light mr-sm-2">Поиск</label>
+                <input class="form-control mr-sm-2" type="search" placeholder="Введите название товара" aria-label="Search" id="search" name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- таблица сравнения цен на товары на разных маркетплейсах -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Результаты поиска "{{ search_term }}"</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Маркетплейс</th>
+                    <th>Цена</th>
+                    <th>Доставка</th>
+                    <th>Ссылка на товар</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for offer in offers %}
+                <tr>
+                    <td>{{ offer.marketplace }}</td>
+                    <td>{{ offer.price }}</td>
+                    <td>{{ offer.delivery }}</td>
+                    <td><a href="{{ offer.link }}">Перейти на сайт</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- подключение библиотеки jQuery и скрипта для использования компонентов Bootstrap -->
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+</body>
+</html>
+```
+
+Чтобы загрузить ваше приложение на GitHub, создайте репозиторий и загрузите все файлы и каталоги вашего проекта. Затем, чтобы опубликовать ваш сайт в интернете, существует множество платформ для хостинга статических сайтов, таких как GitHub Pages, Netlify или Surge. Выберите любую из них, загрузите свой проект и получите URL-адрес вашего сайта.
